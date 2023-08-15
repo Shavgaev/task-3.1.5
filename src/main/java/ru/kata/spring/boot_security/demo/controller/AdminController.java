@@ -19,11 +19,8 @@ import java.util.Collections;
 @RequestMapping
 public class AdminController {
 
-    private UserService userService;
-    private RoleService roleService;
-
-    public AdminController() {
-    }
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {

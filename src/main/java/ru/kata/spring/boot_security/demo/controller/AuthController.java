@@ -10,6 +10,4 @@ public class AuthController {
     public String loginPage() {
         return "login";
     }
-
-
 }
