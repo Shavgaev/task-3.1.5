@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
+@RolesAllowed("ADMIN")
 public class AdminRestController {
 
     private final UserService userService;
