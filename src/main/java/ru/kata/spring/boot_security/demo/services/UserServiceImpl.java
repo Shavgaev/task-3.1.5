@@ -13,28 +13,32 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Autowired
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+
     @Override
+    @Transactional
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
+    @Transactional
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
     }
@@ -63,8 +67,7 @@ public class UserServiceImpl implements UserService {
 
             if (!editUser.getPassword().equals(user.getPassword())) {
                 editUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            }
-            if (user.getPassword().isEmpty()) {
+            } if(user.getPassword().isEmpty()){
                 editUser.setPassword(editUser.getPassword());
             }
             userRepository.save(editUser);
