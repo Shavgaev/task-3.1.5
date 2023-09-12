@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Set;
 
+
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
+
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                                        Authentication authentication) throws IOException {
         Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        if (roles.contains("ROLE_ADMIN")) {
-            httpServletResponse.sendRedirect("/ad");
-        } else if (roles.contains("ROLE_USER")) {
-            httpServletResponse.sendRedirect("/user/myUser");
-        } else {
-            httpServletResponse.sendRedirect("/login");
+        if (roles.contains("ROLE_ADMIN")){
+            httpServletResponse.sendRedirect("/page");
+        }   else {
+            httpServletResponse.sendRedirect("/page/user");
         }
     }
 }

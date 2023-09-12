@@ -2,161 +2,151 @@ package ru.kata.spring.boot_security.demo.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
+import java.util.List;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private int id;
 
-    @Column(name = "username")
-    private String firstName;
+    @Column(name="name")
+    private String name;
 
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "password")
+    @Column(name="age")
+    private int age;
+
+    @Column(name="username", unique = true)
+    private String username;
+
+    @Column(name="password")
     private String password;
 
-    @Column(name = "age")
-    private Integer age;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private Set<Role> roles;
 
-    @Column(name = "email")
-    private String email;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Collection<Role> roles;
 
     public User() {
+
     }
 
-    public User(Long id, String firstName, String lastName, Integer age, String password, String email) {
-        this.id = id;
-        this.firstName = firstName;
+    public User(String name, String lastName, int age, String username, String password, Set<Role> roles) {
+        this.name = name;
         this.lastName = lastName;
-        this.password = password;
         this.age = age;
-        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.roles = roles;
     }
 
-    public Long getId() {
-        return this.id;
+    public int getId() {
+        return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return this.email;
+    public String getName() {
+        return name;
     }
 
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public Integer getAge() {
-        return this.age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLastName() {
-        return this.lastName;
+        return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getEmail() {
-        return this.email;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Collection<Role> getRoles() {
-        return this.roles;
-    }
-
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public String toString() {
-        return "User{id=" + this.id +
-                ", firstName='" + this.firstName +
-                "', lastName='" + this.lastName +
-                "', password='" + this.password +
-                "', age='" + this.age +
-                "', email='" + this.email + "}";
-
-    }
-
+    @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.getRoles();
+        return getRoles();
+    }
+
+    public String getRolesToString() {
+        List<Role> list = getRoles().stream().toList();
+        StringBuilder str = new StringBuilder(list.get(0).toString());
+        if (list.size() == 2) {
+            str.append(" ").append(list.get(1).toString());
+        }
+        return String.valueOf(str);
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(firstName, user.firstName) && Objects.equals(lastName, user.lastName) && Objects.equals(password, user.password) && Objects.equals(age, user.age) && Objects.equals(email, user.email) && Objects.equals(roles, user.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, password, age, email, roles);
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + roles +
+                '}';
     }
 }
