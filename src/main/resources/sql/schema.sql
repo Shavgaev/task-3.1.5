@@ -1,6 +1,3 @@
-delete table if not exists roles;
-delete table if not exists users;
-delete table if not exists users_roles;
 create table roles
 (
     id   int auto_increment
