@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS users_roles;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS users;
+
 create table roles
 (
     id   int auto_increment
