@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import static javax.management.Query.and;
+
 
 @Configuration
 @EnableWebSecurity
@@ -35,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "/index").permitAll()
                 .antMatchers("/api/**").hasRole("ADMIN")
+                .antMatchers("/page/**").authenticated()
                 .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")
                 .and()
                 .formLogin().successHandler(successUserHandler)
@@ -42,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout().logoutUrl("/logout")
                 .permitAll();
+
     }
 
     @Bean
